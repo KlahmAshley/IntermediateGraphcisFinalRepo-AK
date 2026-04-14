@@ -36,9 +36,13 @@ namespace Unity.Cinemachine.Samples
         SimplePlayerControllerBase m_Controller;
         Vector3 m_PreviousPosition; // used if m_Controller == null or disabled
 
+        Animator ani;
+
+
+
         protected struct AnimationParams
         {
-            public bool IsWalking;
+            public bool IsWalk;
             public bool IsRunning;
             public bool IsJumping;
             public bool LandTriggered;
@@ -62,7 +66,7 @@ namespace Unity.Cinemachine.Samples
                     return m_AnimationParams.IsRunning ? States.RunJump : States.Jump;
                 if (m_AnimationParams.IsRunning)
                     return States.Run;
-                return m_AnimationParams.IsWalking ? States.Walk : States.Idle;
+                return m_AnimationParams.IsWalk ? States.Walk : States.Idle;
             }
         }
 
@@ -111,8 +115,8 @@ namespace Unity.Cinemachine.Samples
 
             // Hysteresis reduction
             bool isRunning = speed > NormalWalkSpeed * 2 + (m_AnimationParams.IsRunning ? -0.15f : 0.15f);
-            bool isWalking = !isRunning && speed > k_IdleThreshold + (m_AnimationParams.IsWalking ? -0.05f : 0.05f);
-            m_AnimationParams.IsWalking = isWalking;
+            bool isWalking = !isRunning && speed > k_IdleThreshold + (m_AnimationParams.IsWalk ? -0.05f : 0.05f);
+            m_AnimationParams.IsWalk = isWalking;
             m_AnimationParams.IsRunning = isRunning;
 
             // Set the normalized direction of motion and scale the animation speed to match motion speed
@@ -152,7 +156,7 @@ namespace Unity.Cinemachine.Samples
             animator.SetFloat("DirX", animationParams.Direction.x);
             animator.SetFloat("DirZ", animationParams.Direction.z);
             animator.SetFloat("MotionScale", animationParams.MotionScale);
-            animator.SetBool("Walking", animationParams.IsWalking);
+            animator.SetBool("Walking", animationParams.IsWalk);
             animator.SetBool("Running", animationParams.IsRunning);
             animator.SetFloat("JumpScale", animationParams.JumpScale);
 
